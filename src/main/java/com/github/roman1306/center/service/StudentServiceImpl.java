@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class StudentServiceImpl implements StudentService{
+public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
 
     @Override
@@ -60,11 +60,9 @@ public class StudentServiceImpl implements StudentService{
     }
 
     private Duration getInitialHoursCurriculum(Curriculum curriculum) {
-        Duration initialHours = Duration.ofHours(0);
-        for (Course course : curriculum.getCourses()) {
-            initialHours = initialHours.plus(course.getDuration());
-        }
-        return initialHours;
+        return Duration.ofHours(curriculum.getCourses().stream()
+                .mapToLong(c -> c.getDuration().toHours())
+                .sum());
     }
 
     private Duration getRemainingHours(Student student) {
